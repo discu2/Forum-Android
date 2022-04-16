@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
             val username = binding.editTextTextPersonName.text.toString()
             val password = binding.editTextTextPassword.text.toString()
             accountViewModel.login(username, password)
-            Toast.makeText(requireContext(), "logging", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(), "logging", Toast.LENGTH_SHORT).show()
         }
     }
 
