@@ -38,6 +38,7 @@ class AccountViewModel : ViewModel() {
                     Gson().fromJson(it.toString(), ApiService.LoginResponse::class.java)
                 accountRepository.value?.auth?.accessToken = loginResponse.accessToken
                 accountRepository.value?.auth?.refreshToken = loginResponse.refreshToken
+                accountRepository.value?.username = username
                 accountRepository.value?.auth?.isLoggedIn = true
                 updateAccountRepository()
             },

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -35,6 +36,7 @@ class LoginFragment : Fragment() {
             viewLifecycleOwner
         ) {
             if (it.auth.isLoggedIn) {
+                Toast.makeText(requireContext(), "logged in", Toast.LENGTH_SHORT).show()
                 controller.popBackStack()
             }
         }
@@ -43,6 +45,7 @@ class LoginFragment : Fragment() {
             val username = binding.editTextTextPersonName.text.toString()
             val password = binding.editTextTextPassword.text.toString()
             accountViewModel.login(username, password)
+            Toast.makeText(requireContext(), "logging", Toast.LENGTH_SHORT).show()
         }
     }
 

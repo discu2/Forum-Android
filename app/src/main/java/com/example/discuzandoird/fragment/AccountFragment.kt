@@ -39,10 +39,10 @@ class AccountFragment : Fragment() {
             viewLifecycleOwner
         ) {
             if (it.auth.isLoggedIn) {
-                binding.textView.text = "已登入"
+                binding.textView.text = it.username
                 binding.buttonLogin.isVisible = false
             } else {
-                binding.textView.text = "未登入"
+                binding.textView.text = "Please login"
             }
         }
 
