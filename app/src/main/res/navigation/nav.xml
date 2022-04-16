@@ -27,9 +27,5 @@
         android:id="@+id/loginFragment"
         android:name="com.example.discuzandoird.fragment.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/login_fragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_fragmentAccount"
-            app:destination="@id/fragmentAccount" />
-    </fragment>
+        tools:layout="@layout/login_fragment" />
 </navigation>
