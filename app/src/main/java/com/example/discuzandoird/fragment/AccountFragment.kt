@@ -1,24 +1,26 @@
 package com.example.discuzandoird.fragment
 
-import android.animation.ObjectAnimator
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.android.volley.toolbox.Volley
 import com.example.discuzandoird.R
 import com.example.discuzandoird.databinding.AccountFragmentBinding
+import com.example.discuzandoird.model.AccountRepository
 import com.example.discuzandoird.viewmodel.AccountViewModel
 
 class AccountFragment : Fragment() {
 
-    private lateinit var viewModel: AccountViewModel
     private lateinit var binding: AccountFragmentBinding
+    private val accountViewModel: AccountViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,13 +30,29 @@ class AccountFragment : Fragment() {
         return binding.root
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this)[AccountViewModel::class.java]
+
+    override fun onStart() {
+        super.onStart()
+
+        accountViewModel.setQueue(Volley.newRequestQueue(requireActivity()))
+        accountViewModel.accountRepository.observe(
+            viewLifecycleOwner
+        ) {
+            if (it.auth.isLoggedIn) {
+                binding.textView.text = "已登入"
+                binding.buttonLogin.isVisible = false
+            } else {
+                binding.textView.text = "未登入"
+            }
+        }
+
+
+
         binding.buttonLogin.setOnClickListener {
-            val controller:NavController = Navigation.findNavController(this.requireView())
+
+            val controller: NavController = Navigation.findNavController(this.requireView())
             controller.navigate(R.id.action_fragmentAccount_to_loginFragment)
+
         }
         // TODO: Use the ViewModel
     }
