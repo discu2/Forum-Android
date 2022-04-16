@@ -33,7 +33,7 @@ class AccountFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this)[AccountViewModel::class.java]
         binding.buttonLogin.setOnClickListener {
-            val controller:NavController = Navigation.findNavController(binding.root)
+            val controller:NavController = Navigation.findNavController(this.requireView())
             controller.navigate(R.id.action_fragmentAccount_to_loginFragment)
         }
         // TODO: Use the ViewModel

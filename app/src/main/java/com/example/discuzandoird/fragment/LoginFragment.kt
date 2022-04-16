@@ -28,8 +28,8 @@ class LoginFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         binding.button.setOnClickListener {
-            val controller:NavController = Navigation.findNavController(binding.root)
-            controller.navigate(R.id.action_loginFragment_to_fragmentAccount)
+            val controller:NavController = Navigation.findNavController(this.requireView())
+            controller.popBackStack()
         }
     }
 
