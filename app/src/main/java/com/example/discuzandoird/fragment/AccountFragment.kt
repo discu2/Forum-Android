@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.android.volley.toolbox.Volley
 import com.example.discuzandoird.R
 import com.example.discuzandoird.databinding.AccountFragmentBinding
-import com.example.discuzandoird.model.AccountRepository
 import com.example.discuzandoird.viewmodel.AccountViewModel
 
 class AccountFragment : Fragment() {
