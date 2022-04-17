@@ -24,10 +24,25 @@ class ApiService {
         val refreshToken: String
     )
 
+    data class AccountResponse(
+
+        @SerializedName("username")
+        val username: String,
+        @SerializedName("nickname")
+        val nickname: String,
+        @SerializedName("roleIds")
+        val roleIds: List<String>
+
+    )
+
     private val url = "http://192.168.0.101:8080/"
 
     fun login(): String {
         return url + "account/login"
+    }
+
+    fun getAccount(username: String): String {
+        return url + "account/" + username
     }
 
     fun getAccessToken(): String {
