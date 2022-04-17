@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -28,7 +29,6 @@ class AccountFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onStart() {
         super.onStart()
 
@@ -44,15 +44,11 @@ class AccountFragment : Fragment() {
             }
         }
 
-
-
         binding.buttonLogin.setOnClickListener {
 
             val controller: NavController = Navigation.findNavController(this.requireView())
             controller.navigate(R.id.action_fragmentAccount_to_loginFragment)
 
         }
-        // TODO: Use the ViewModel
     }
-
 }

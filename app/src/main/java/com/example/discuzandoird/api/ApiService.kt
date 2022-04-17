@@ -2,7 +2,7 @@ package com.example.discuzandoird.api
 
 import com.google.gson.annotations.SerializedName
 
-class Api {
+class ApiService {
 
     data class LoginRequest(
 
@@ -25,7 +25,6 @@ class Api {
     )
 
     private val url = "http://192.168.0.101:8080/"
-
 
     fun login(): String {
         return url + "account/login"
