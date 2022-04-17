@@ -13,7 +13,7 @@ import org.json.JSONObject
 
 class AccountViewModel : ViewModel() {
 
-    var accountRepository = MutableLiveData<AccountBean>().also {
+    var accountBean = MutableLiveData<AccountBean>().also {
         it.value = AccountBean()
     }
     private var queue: RequestQueue? = null
@@ -32,13 +32,37 @@ class AccountViewModel : ViewModel() {
             ApiService().login(),
             JSONObject(Gson().toJson(loginRequest)),
             {
-                var response =
+                val response =
                     Gson().fromJson(it.toString(), ApiService.LoginResponse::class.java)
-                accountRepository.value?.auth?.accessToken = response.accessToken
-                accountRepository.value?.auth?.refreshToken = response.refreshToken
-                accountRepository.value?.username = username
-                accountRepository.value?.auth?.isLoggedIn = true
-                updateAccountRepository()
+                accountBean.value?.auth?.accessToken = response.accessToken
+                accountBean.value?.auth?.refreshToken = response.refreshToken
+                accountBean.value?.username = username
+                accountBean.value?.auth?.isLoggedIn = true
+                updateAccountBean()
+                getAccount()
+            },
+            {
+                println(it)
+            }
+        )
+        queue?.add(jsonObjectRequest)
+    }
+
+    private fun getAccount() {
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET,
+            accountBean.value?.username?.let { ApiService().getAccount(it) },
+            null,
+            {
+                val response =
+                    Gson().fromJson(it.toString(), ApiService.AccountResponse::class.java)
+                accountBean.value?.username = response.username
+                accountBean.value?.nickname = response.nickname
+                accountBean.value?.roleIds = response.roleIds
+                println(response.username)
+                println(response.nickname)
+                println(response.roleIds)
+                updateAccountBean()
             },
             {
                 println(it)
@@ -55,8 +79,8 @@ class AccountViewModel : ViewModel() {
             {
                 val response =
                     Gson().fromJson(it.toString(), ApiService.LoginResponse::class.java)
-                if (response.accessToken != accountRepository.value?.auth?.accessToken) {
-                    accountRepository.value?.auth?.accessToken = response.accessToken
+                if (response.accessToken != accountBean.value?.auth?.accessToken) {
+                    accountBean.value?.auth?.accessToken = response.accessToken
                 }
                 action()
             },
@@ -67,17 +91,18 @@ class AccountViewModel : ViewModel() {
             override fun getHeaders(): MutableMap<String, String> {
 
                 val headers = HashMap<String, String>()
-                headers["Authorization"] = "Bearer " + accountRepository.value?.auth?.refreshToken
+                headers["Authorization"] = "Bearer " + accountBean.value?.auth?.refreshToken
                 return headers
+
             }
         }
         queue?.add(stringRequest)
 
     }
 
-    private fun updateAccountRepository() {
+    private fun updateAccountBean() {
 
-        accountRepository.postValue(this.accountRepository.value)
+        accountBean.postValue(this.accountBean.value)
 
     }
 

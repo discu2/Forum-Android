@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -32,7 +31,7 @@ class LoginFragment : Fragment() {
         super.onStart()
         val controller: NavController = Navigation.findNavController(this.requireView())
 
-        accountViewModel.accountRepository.observe(
+        accountViewModel.accountBean.observe(
             viewLifecycleOwner
         ) {
             if (it.auth.isLoggedIn) {
@@ -45,7 +44,6 @@ class LoginFragment : Fragment() {
             val username = binding.editTextTextPersonName.text.toString()
             val password = binding.editTextTextPassword.text.toString()
             accountViewModel.login(username, password)
-            //Toast.makeText(requireContext(), "logging", Toast.LENGTH_SHORT).show()
         }
     }
 

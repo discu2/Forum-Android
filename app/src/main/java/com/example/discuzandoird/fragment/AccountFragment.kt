@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -33,7 +32,7 @@ class AccountFragment : Fragment() {
         super.onStart()
 
         accountViewModel.setQueue(Volley.newRequestQueue(requireActivity()))
-        accountViewModel.accountRepository.observe(
+        accountViewModel.accountBean.observe(
             viewLifecycleOwner
         ) {
             if (it.auth.isLoggedIn) {
