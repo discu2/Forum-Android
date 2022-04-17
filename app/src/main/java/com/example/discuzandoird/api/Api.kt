@@ -1,8 +1,8 @@
-package com.example.discuzandoird.repository
+package com.example.discuzandoird.api
 
 import com.google.gson.annotations.SerializedName
 
-class ApiRepository {
+class Api {
 
     data class LoginRequest(
 

@@ -1,4 +1,4 @@
-package com.example.discuzandoird.model
+package com.example.discuzandoird.bean
 
 class AuthBean {
 
