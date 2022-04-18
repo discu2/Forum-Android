@@ -10,11 +10,15 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.android.volley.Request
 import com.example.discuzandoird.R
+import com.example.discuzandoird.api.AccountService
 import com.example.discuzandoird.databinding.FragmentAccountBinding
 import com.example.discuzandoird.databinding.FragmentLoginBinding
 import com.example.discuzandoird.databinding.FragmentRegisterBinding
 import com.example.discuzandoird.viewmodel.AccountViewModel
+import com.google.gson.Gson
+import org.json.JSONObject
 
 class RegisterFragment : Fragment() {
 
@@ -36,23 +40,37 @@ class RegisterFragment : Fragment() {
 
         val controller: NavController = Navigation.findNavController(this.requireView())
 
-        accountViewModel.isRegistered.observe(
-            viewLifecycleOwner
-        ) {
-            if (it) {
-                Toast.makeText(requireContext(), "Registered", Toast.LENGTH_SHORT).show()
-                controller.popBackStack()
-            }
-        }
-
-        binding.buttonRegister.setOnClickListener{
+        binding.buttonRegister.setOnClickListener {
 
             val mail = binding.editTextTextEmailRegister.text.toString()
             val username = binding.editTextTextPersonNameRegister.text.toString()
             val password = binding.editTextTextPasswordRegister.text.toString()
-            accountViewModel.register(mail, username, password)
 
+            accountViewModel.fetchApi(
+                Request.Method.POST,
+                AccountService().register(),
+                JSONObject(Gson().toJson(AccountService.RegisterRequest(mail, username, password))),
+                {
+
+                    Toast.makeText(requireContext(), "Registered", Toast.LENGTH_SHORT).show()
+                    controller.popBackStack()
+
+                },
+                {
+
+                    Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+
+                }
+            )
         }
 
     }
+
+    override fun onStop() {
+        super.onStop()
+
+        binding.root.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.out_right))
+
+    }
+
 }

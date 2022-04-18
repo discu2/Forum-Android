@@ -63,5 +63,4 @@ class AccountService {
     fun getAccessToken(): String {
         return url + "oauth/refresh_token"
     }
-
 }

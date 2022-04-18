@@ -10,14 +10,19 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.android.volley.Request
 import com.example.discuzandoird.R
+import com.example.discuzandoird.api.AccountService
 import com.example.discuzandoird.databinding.FragmentLoginBinding
 import com.example.discuzandoird.viewmodel.AccountViewModel
+import com.google.gson.Gson
+import org.json.JSONObject
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val accountViewModel: AccountViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,20 +45,43 @@ class LoginFragment : Fragment() {
             }
         }
 
-        binding.buttonLogin.setOnClickListener {
+        binding.buttonLoginLogout.setOnClickListener {
             val username = binding.editTextTextPersonName.text.toString()
             val password = binding.editTextTextPassword.text.toString()
-            accountViewModel.login(username, password)
+
+            accountViewModel.fetchApi(
+                Request.Method.POST,
+                AccountService().login(),
+                JSONObject(
+                    Gson().toJson(AccountService.LoginRequest(username, password))
+                ),
+                {
+                    val response =
+                        Gson().fromJson(it.toString(), AccountService.LoginResponse::class.java)
+                    accountViewModel.accountBean.value?.auth?.accessToken = response.accessToken
+                    accountViewModel.accountBean.value?.auth?.refreshToken = response.refreshToken
+                    accountViewModel.accountBean.value?.username = username
+                    accountViewModel.accountBean.value?.auth?.isLoggedIn = true
+                    accountViewModel.updateAccountBean()
+                },
+                {
+                    Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         binding.buttonRegister.setOnClickListener {
 
-            val controller: NavController = Navigation.findNavController(this.requireView())
             controller.navigate(R.id.action_loginFragment_to_registerFragment)
 
         }
-
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        binding.root.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.out_right))
+
+    }
 
 }
