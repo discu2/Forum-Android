@@ -1,81 +1,69 @@
 package com.example.discuzandoird.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.volley.Request
-import com.android.volley.RequestQueue
+import com.android.volley.*
+import com.android.volley.toolbox.HttpHeaderParser
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.example.discuzandoird.bean.AccountBean
 import com.example.discuzandoird.api.AccountService
+import com.example.discuzandoird.singleton.VolleySingleton
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.UnsupportedEncodingException
+import java.nio.charset.Charset
 
-class AccountViewModel : ViewModel() {
+class AccountViewModel(application: Application) : AndroidViewModel(application) {
 
     var accountBean = MutableLiveData<AccountBean>().also {
         it.value = AccountBean()
     }
 
-    var isRegistered = MutableLiveData<Boolean>()
-
-    private var queue: RequestQueue? = null
-
-    fun setQueue(queue: RequestQueue) {
-
-        this.queue = queue
-
-    }
-
-    fun login(username: String, password: String) {
-
-        val loginRequest = AccountService.LoginRequest(username, password)
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST,
-            AccountService().login(),
-            JSONObject(Gson().toJson(loginRequest)),
+    fun fetchApi(
+        method: Int,
+        url: String,
+        request: JSONObject,
+        response: (jsonObject: JSONObject?) -> Unit,
+        error: (volleyError: VolleyError?) -> Unit
+    ) {
+        val jsonObjectRequest = object : JsonObjectRequest(
+            method,
+            url,
+            request,
             {
-                val response =
-                    Gson().fromJson(it.toString(), AccountService.LoginResponse::class.java)
-                accountBean.value?.auth?.accessToken = response.accessToken
-                accountBean.value?.auth?.refreshToken = response.refreshToken
-                accountBean.value?.username = username
-                accountBean.value?.auth?.isLoggedIn = true
-                getAccount()
+                response(it)
             },
             {
-                println(it)
+                error(it)
             }
-        )
-        queue?.add(jsonObjectRequest)
-    }
+        ) {
 
-    fun register(mail: String, username: String, password: String) {
+            override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject>? {
 
-    }
+                if (response.data.isEmpty()) {
+                    val responseData = "{}".encodeToByteArray()
+                    val newResponse = NetworkResponse(
+                        response.statusCode,
+                        responseData,
+                        response.headers,
+                        response.notModified
+                    )
+                    return super.parseNetworkResponse(newResponse)
+                }
+                return super.parseNetworkResponse(response)
 
-    private fun getAccount() {
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET,
-            accountBean.value?.username?.let { AccountService().getAccount(it) },
-            null,
-            {
-                val response =
-                    Gson().fromJson(it.toString(), AccountService.AccountResponse::class.java)
-                accountBean.value?.username = response.username
-                accountBean.value?.nickname = response.nickname
-                accountBean.value?.roleIds = response.roleIds
-                println(response.username)
-                println(response.nickname)
-                println(response.roleIds)
-                updateAccountBean()
-            },
-            {
-                println(it)
             }
-        )
-        queue?.add(jsonObjectRequest)
+
+        }
+        VolleySingleton.getInstance(getApplication()).requestQueue.add(jsonObjectRequest)
     }
+
 
     fun oauth(action: () -> Unit) {
 
@@ -102,11 +90,11 @@ class AccountViewModel : ViewModel() {
 
             }
         }
-        queue?.add(stringRequest)
+        VolleySingleton.getInstance(getApplication()).requestQueue.add(stringRequest)
 
     }
 
-    private fun updateAccountBean() {
+    fun updateAccountBean() {
 
         accountBean.postValue(this.accountBean.value)
 
