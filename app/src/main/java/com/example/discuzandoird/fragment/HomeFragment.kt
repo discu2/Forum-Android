@@ -8,21 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.example.discuzandoird.R
-import com.example.discuzandoird.databinding.AccountFragmentBinding
-import com.example.discuzandoird.databinding.HomeFragmentBinding
+import com.example.discuzandoird.databinding.FragmentHomeBinding
 import com.example.discuzandoird.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var binding: HomeFragmentBinding
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        binding = HomeFragmentBinding.inflate(layoutInflater, container, false)
+        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         binding.root.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.from_left))
         return binding.root
     }

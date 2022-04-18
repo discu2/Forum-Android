@@ -7,7 +7,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.example.discuzandoird.bean.AccountBean
-import com.example.discuzandoird.api.ApiService
+import com.example.discuzandoird.api.AccountService
 import com.google.gson.Gson
 import org.json.JSONObject
 
@@ -16,6 +16,9 @@ class AccountViewModel : ViewModel() {
     var accountBean = MutableLiveData<AccountBean>().also {
         it.value = AccountBean()
     }
+
+    var isRegistered = MutableLiveData<Boolean>()
+
     private var queue: RequestQueue? = null
 
     fun setQueue(queue: RequestQueue) {
@@ -26,19 +29,18 @@ class AccountViewModel : ViewModel() {
 
     fun login(username: String, password: String) {
 
-        val loginRequest = ApiService.LoginRequest(username, password)
+        val loginRequest = AccountService.LoginRequest(username, password)
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST,
-            ApiService().login(),
+            AccountService().login(),
             JSONObject(Gson().toJson(loginRequest)),
             {
                 val response =
-                    Gson().fromJson(it.toString(), ApiService.LoginResponse::class.java)
+                    Gson().fromJson(it.toString(), AccountService.LoginResponse::class.java)
                 accountBean.value?.auth?.accessToken = response.accessToken
                 accountBean.value?.auth?.refreshToken = response.refreshToken
                 accountBean.value?.username = username
                 accountBean.value?.auth?.isLoggedIn = true
-                updateAccountBean()
                 getAccount()
             },
             {
@@ -48,14 +50,18 @@ class AccountViewModel : ViewModel() {
         queue?.add(jsonObjectRequest)
     }
 
+    fun register(mail: String, username: String, password: String) {
+
+    }
+
     private fun getAccount() {
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.GET,
-            accountBean.value?.username?.let { ApiService().getAccount(it) },
+            accountBean.value?.username?.let { AccountService().getAccount(it) },
             null,
             {
                 val response =
-                    Gson().fromJson(it.toString(), ApiService.AccountResponse::class.java)
+                    Gson().fromJson(it.toString(), AccountService.AccountResponse::class.java)
                 accountBean.value?.username = response.username
                 accountBean.value?.nickname = response.nickname
                 accountBean.value?.roleIds = response.roleIds
@@ -75,10 +81,10 @@ class AccountViewModel : ViewModel() {
 
         val stringRequest = object : StringRequest(
             Method.GET,
-            ApiService().getAccessToken(),
+            AccountService().getAccessToken(),
             {
                 val response =
-                    Gson().fromJson(it.toString(), ApiService.LoginResponse::class.java)
+                    Gson().fromJson(it.toString(), AccountService.LoginResponse::class.java)
                 if (response.accessToken != accountBean.value?.auth?.accessToken) {
                     accountBean.value?.auth?.accessToken = response.accessToken
                 }

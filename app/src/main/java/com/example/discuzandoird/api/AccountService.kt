@@ -2,7 +2,7 @@ package com.example.discuzandoird.api
 
 import com.google.gson.annotations.SerializedName
 
-class ApiService {
+class AccountService {
 
     data class LoginRequest(
 
@@ -24,6 +24,17 @@ class ApiService {
         val refreshToken: String
     )
 
+    data class RegisterRequest(
+
+        @SerializedName("mail")
+        val mail: String,
+        @SerializedName("username")
+        val username: String,
+        @SerializedName("password")
+        val password: String,
+
+        )
+
     data class AccountResponse(
 
         @SerializedName("username")
@@ -39,6 +50,10 @@ class ApiService {
 
     fun login(): String {
         return url + "account/login"
+    }
+
+    fun register(): String {
+        return url + "account/register"
     }
 
     fun getAccount(username: String): String {

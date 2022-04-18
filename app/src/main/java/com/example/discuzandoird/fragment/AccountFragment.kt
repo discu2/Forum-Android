@@ -12,18 +12,18 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.android.volley.toolbox.Volley
 import com.example.discuzandoird.R
-import com.example.discuzandoird.databinding.AccountFragmentBinding
+import com.example.discuzandoird.databinding.FragmentAccountBinding
 import com.example.discuzandoird.viewmodel.AccountViewModel
 
 class AccountFragment : Fragment() {
 
-    private lateinit var binding: AccountFragmentBinding
+    private lateinit var binding: FragmentAccountBinding
     private val accountViewModel: AccountViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = AccountFragmentBinding.inflate(layoutInflater, container, false)
+        binding = FragmentAccountBinding.inflate(layoutInflater, container, false)
         binding.root.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.from_right))
         return binding.root
     }
@@ -50,4 +50,5 @@ class AccountFragment : Fragment() {
 
         }
     }
+
 }

@@ -11,49 +11,48 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.discuzandoird.R
+import com.example.discuzandoird.databinding.FragmentAccountBinding
 import com.example.discuzandoird.databinding.FragmentLoginBinding
+import com.example.discuzandoird.databinding.FragmentRegisterBinding
 import com.example.discuzandoird.viewmodel.AccountViewModel
 
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginBinding
+    lateinit var binding: FragmentRegisterBinding
     private val accountViewModel: AccountViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
+    ): View? {
+
+        binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
         binding.root.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.from_right))
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
+
         val controller: NavController = Navigation.findNavController(this.requireView())
 
-        accountViewModel.accountBean.observe(
+        accountViewModel.isRegistered.observe(
             viewLifecycleOwner
         ) {
-            if (it.auth.isLoggedIn) {
-                Toast.makeText(requireContext(), "logged in", Toast.LENGTH_SHORT).show()
+            if (it) {
+                Toast.makeText(requireContext(), "Registered", Toast.LENGTH_SHORT).show()
                 controller.popBackStack()
             }
         }
 
-        binding.buttonLogin.setOnClickListener {
-            val username = binding.editTextTextPersonName.text.toString()
-            val password = binding.editTextTextPassword.text.toString()
-            accountViewModel.login(username, password)
-        }
+        binding.buttonRegister.setOnClickListener{
 
-        binding.buttonRegister.setOnClickListener {
-
-            val controller: NavController = Navigation.findNavController(this.requireView())
-            controller.navigate(R.id.action_loginFragment_to_registerFragment)
+            val mail = binding.editTextTextEmailRegister.text.toString()
+            val username = binding.editTextTextPersonNameRegister.text.toString()
+            val password = binding.editTextTextPasswordRegister.text.toString()
+            accountViewModel.register(mail, username, password)
 
         }
 
     }
-
-
 }

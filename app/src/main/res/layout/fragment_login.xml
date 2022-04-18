@@ -15,28 +15,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4" />
+            app:layout_constraintGuide_percent="0.3" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.4" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.6" />
+            app:layout_constraintGuide_percent="0.5" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.7" />
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline11"
@@ -58,12 +65,13 @@
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:ems="10"
+            android:gravity="center"
             android:hint="@string/hint_username"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:textColor="#FFFFFF"
             android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#78909C"
+            android:textColorHint="#818181"
             android:textColorLink="#FFFFFF"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toStartOf="@+id/guideline12"
@@ -76,12 +84,13 @@
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:ems="10"
+            android:gravity="center"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:minHeight="48dp"
             android:textColor="#FFFFFF"
             android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#78909C"
+            android:textColorHint="#818181"
             android:textColorLink="#FFFFFF"
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
             app:layout_constraintEnd_toStartOf="@+id/guideline12"
@@ -89,7 +98,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonLogin"
             style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -102,6 +111,19 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline12"
             app:layout_constraintStart_toStartOf="@+id/guideline11"
             app:layout_constraintTop_toTopOf="@+id/guideline4"
+            app:rippleColor="#818181" />
+
+        <Button
+            android:id="@+id/buttonRegister"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:text="@string/register"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline14"
+            app:layout_constraintEnd_toStartOf="@+id/guideline12"
             app:rippleColor="#818181" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

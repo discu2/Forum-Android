@@ -9,7 +9,7 @@
         android:id="@+id/fragmentHome"
         android:name="com.example.discuzandoird.fragment.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" >
+        tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_fragmentHome_to_fragmentAccount"
             app:destination="@id/fragmentAccount" />
@@ -18,7 +18,7 @@
         android:id="@+id/fragmentAccount"
         android:name="com.example.discuzandoird.fragment.AccountFragment"
         android:label="account_fragment"
-        tools:layout="@layout/account_fragment" >
+        tools:layout="@layout/fragment_account" >
         <action
             android:id="@+id/action_fragmentAccount_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -27,5 +27,14 @@
         android:id="@+id/loginFragment"
         android:name="com.example.discuzandoird.fragment.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/login_fragment" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.discuzandoird.fragment.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
 </navigation>

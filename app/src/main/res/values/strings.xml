@@ -5,6 +5,7 @@
     <string name="login">Login</string>
     <string name="hint_username">username</string>
     <string name="hint_password">password</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hint_email">Email</string>
+    <string name="register">Register</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
