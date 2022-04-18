@@ -98,7 +98,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
         <Button
-            android:id="@+id/buttonLogin"
+            android:id="@+id/buttonLoginLogout"
             style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
