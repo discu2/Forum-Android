@@ -1,8 +1,15 @@
 package com.example.discuzandoird.api
 
+import android.app.Application
+import com.android.volley.NetworkResponse
+import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
+import com.example.discuzandoird.singleton.VolleySingleton
 import com.google.gson.annotations.SerializedName
+import org.json.JSONObject
 
-class AccountService {
+class AccountService constructor(application: Application) {
 
     data class LoginRequest(
 
@@ -46,6 +53,8 @@ class AccountService {
 
     )
 
+    private val application = application
+
     private val url = "http://192.168.0.101:8080/"
 
     fun login(): String {
@@ -62,5 +71,44 @@ class AccountService {
 
     fun getAccessToken(): String {
         return url + "oauth/refresh_token"
+    }
+
+    fun fetchApi(
+        method: Int,
+        url: String,
+        request: JSONObject,
+        response: (jsonObject: JSONObject?) -> Unit,
+        error: (volleyError: VolleyError?) -> Unit
+    ) {
+        val jsonObjectRequest = object : JsonObjectRequest(
+            method,
+            url,
+            request,
+            {
+                response(it)
+            },
+            {
+                error(it)
+            }
+        ) {
+
+            override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject>? {
+
+                if (response.data.isEmpty()) {
+                    val responseData = "{}".encodeToByteArray()
+                    val newResponse = NetworkResponse(
+                        response.statusCode,
+                        responseData,
+                        response.headers,
+                        response.notModified
+                    )
+                    return super.parseNetworkResponse(newResponse)
+                }
+                return super.parseNetworkResponse(response)
+
+            }
+
+        }
+        VolleySingleton.getInstance(application).requestQueue.add(jsonObjectRequest)
     }
 }

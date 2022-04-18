@@ -33,9 +33,11 @@ class RegisterFragment : Fragment() {
         binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
         binding.root.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.from_right))
         return binding.root
+
     }
 
     override fun onStart() {
+
         super.onStart()
 
         val controller: NavController = Navigation.findNavController(this.requireView())
@@ -46,9 +48,9 @@ class RegisterFragment : Fragment() {
             val username = binding.editTextTextPersonNameRegister.text.toString()
             val password = binding.editTextTextPasswordRegister.text.toString()
 
-            accountViewModel.fetchApi(
+            accountViewModel.accountService.fetchApi(
                 Request.Method.POST,
-                AccountService().register(),
+                accountViewModel.accountService.register(),
                 JSONObject(Gson().toJson(AccountService.RegisterRequest(mail, username, password))),
                 {
 
@@ -58,7 +60,11 @@ class RegisterFragment : Fragment() {
                 },
                 {
 
-                    Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        it?.networkResponse?.statusCode.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
 
                 }
             )
