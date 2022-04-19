@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.android.volley.toolbox.Volley
 import com.example.discuzandoird.R
 import com.example.discuzandoird.bean.AccountBean
 import com.example.discuzandoird.databinding.FragmentAccountBinding
@@ -32,11 +30,9 @@ class AccountFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        accountViewModel.accountBean.observe(
-            viewLifecycleOwner
-        ) {
+        accountViewModel.accountBean.observe(viewLifecycleOwner) {
 
-            if (it.auth.isLoggedIn) {
+            if (it.isLoggedIn) {
                 binding.textView.text = it.username
                 binding.buttonLoginLogout.text = "Logout"
             } else {
@@ -48,7 +44,7 @@ class AccountFragment : Fragment() {
 
         binding.buttonLoginLogout.setOnClickListener {
 
-            if (accountViewModel.accountBean.value?.auth?.isLoggedIn == true) {
+            if (accountViewModel.accountBean.value?.isLoggedIn == true) {
                 accountViewModel.accountBean.postValue(AccountBean())
             } else {
                 val controller: NavController = Navigation.findNavController(this.requireView())
