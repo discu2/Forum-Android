@@ -3,16 +3,12 @@ package com.example.discuzandoird.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.android.volley.Request
+import com.android.volley.VolleyError
 
-import com.android.volley.*
-
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.example.discuzandoird.bean.AccountBean
-import com.example.discuzandoird.api.AccountService
-import com.example.discuzandoird.singleton.VolleySingleton
+import com.example.discuzandoird.api.ApiService
 import com.google.gson.Gson
-
 import org.json.JSONObject
 
 
@@ -22,40 +18,59 @@ class AccountViewModel(application: Application) : AndroidViewModel(application)
         it.value = AccountBean()
     }
 
-    val accountService = AccountService(getApplication())
-
-    fun oauth(action: () -> Unit) {
-
-        val stringRequest = object : StringRequest(
-            Method.GET,
-            accountService.getAccessToken(),
-            {
-                val response =
-                    Gson().fromJson(it.toString(), AccountService.LoginResponse::class.java)
-                if (response.accessToken != accountBean.value?.auth?.accessToken) {
-                    accountBean.value?.auth?.accessToken = response.accessToken
-                }
-                action()
-            },
-            {
-                println(it)
-            }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-
-                val headers = HashMap<String, String>()
-                headers["Authorization"] = "Bearer " + accountBean.value?.auth?.refreshToken
-                return headers
-
-            }
-        }
-        VolleySingleton.getInstance(getApplication()).requestQueue.add(stringRequest)
-
-    }
+    val apiService = ApiService(getApplication())
 
     fun updateAccountBean() {
 
         accountBean.postValue(this.accountBean.value)
+
+    }
+
+    fun login(
+        username: String,
+        password: String,
+        r: () -> Unit,
+        e: (volleyError: VolleyError?) -> Unit
+    ) {
+
+        apiService.fetchApi(
+            Request.Method.POST,
+            apiService.login(),
+            JSONObject(
+                Gson().toJson(ApiService.LoginRequest(username, password))
+            ),
+            null,
+            {
+
+                val response =
+                    Gson().fromJson(it.toString(), ApiService.LoginResponse::class.java)
+                accountBean.value?.auth?.accessToken = response.accessToken
+                accountBean.value?.auth?.refreshToken = response.refreshToken
+                accountBean.value?.username = username
+                accountBean.value?.auth?.isLoggedIn = true
+                updateAccountBean()
+                r()
+
+            },
+            {
+
+                e(it)
+
+            }
+        )
+
+    }
+
+    fun oauthCheck() {
+
+        apiService.fetchApi(
+            Request.Method.GET,
+            apiService.getAccessToken(),
+            null,
+            accountBean.value?.auth?.refreshToken,
+            {},
+            {}
+        )
 
     }
 

@@ -9,7 +9,7 @@ import com.example.discuzandoird.singleton.VolleySingleton
 import com.google.gson.annotations.SerializedName
 import org.json.JSONObject
 
-class AccountService constructor(application: Application) {
+class ApiService constructor(application: Application) {
 
     data class LoginRequest(
 
@@ -76,7 +76,8 @@ class AccountService constructor(application: Application) {
     fun fetchApi(
         method: Int,
         url: String,
-        request: JSONObject,
+        request: JSONObject?,
+        refreshToken: String?,
         response: (jsonObject: JSONObject?) -> Unit,
         error: (volleyError: VolleyError?) -> Unit
     ) {
@@ -92,7 +93,7 @@ class AccountService constructor(application: Application) {
             }
         ) {
 
-            override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject>? {
+            override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject> {
 
                 if (response.data.isEmpty()) {
                     val responseData = "{}".encodeToByteArray()
@@ -105,6 +106,16 @@ class AccountService constructor(application: Application) {
                     return super.parseNetworkResponse(newResponse)
                 }
                 return super.parseNetworkResponse(response)
+
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+
+                val headers = HashMap<String, String>()
+                if (refreshToken != null) {
+                    headers["Authorization"] = "Bearer $refreshToken"
+                }
+                return headers
 
             }
 

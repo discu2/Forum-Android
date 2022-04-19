@@ -12,9 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.android.volley.Request
 import com.example.discuzandoird.R
-import com.example.discuzandoird.api.AccountService
-import com.example.discuzandoird.databinding.FragmentAccountBinding
-import com.example.discuzandoird.databinding.FragmentLoginBinding
+import com.example.discuzandoird.api.ApiService
 import com.example.discuzandoird.databinding.FragmentRegisterBinding
 import com.example.discuzandoird.viewmodel.AccountViewModel
 import com.google.gson.Gson
@@ -48,10 +46,11 @@ class RegisterFragment : Fragment() {
             val username = binding.editTextTextPersonNameRegister.text.toString()
             val password = binding.editTextTextPasswordRegister.text.toString()
 
-            accountViewModel.accountService.fetchApi(
+            accountViewModel.apiService.fetchApi(
                 Request.Method.POST,
-                accountViewModel.accountService.register(),
-                JSONObject(Gson().toJson(AccountService.RegisterRequest(mail, username, password))),
+                accountViewModel.apiService.register(),
+                JSONObject(Gson().toJson(ApiService.RegisterRequest(mail, username, password))),
+                null,
                 {
 
                     Toast.makeText(requireContext(), "Registered", Toast.LENGTH_SHORT).show()

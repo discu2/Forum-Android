@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.android.volley.Request
 import com.example.discuzandoird.R
-import com.example.discuzandoird.api.AccountService
+import com.example.discuzandoird.api.ApiService
 import com.example.discuzandoird.databinding.FragmentLoginBinding
 import com.example.discuzandoird.viewmodel.AccountViewModel
 import com.google.gson.Gson
@@ -39,39 +39,26 @@ class LoginFragment : Fragment() {
         val controller: NavController = Navigation.findNavController(this.requireView())
 
          binding.buttonLoginLogout.setOnClickListener {
+
             val username = binding.editTextTextPersonName.text.toString()
             val password = binding.editTextTextPassword.text.toString()
 
-            accountViewModel.accountService.fetchApi(
-                Request.Method.POST,
-                accountViewModel.accountService.login(),
-                JSONObject(
-                    Gson().toJson(AccountService.LoginRequest(username, password))
-                ),
-                {
+             accountViewModel.login(
+                 username,
+                 password,
+                 {
+                     Toast.makeText(requireContext(), "logged in", Toast.LENGTH_SHORT).show()
+                     controller.popBackStack()
+                 },
+                 {
+                     Toast.makeText(
+                         requireContext(),
+                         it?.networkResponse?.statusCode.toString(),
+                         Toast.LENGTH_SHORT
+                     ).show()
+                 }
+             )
 
-                    val response =
-                        Gson().fromJson(it.toString(), AccountService.LoginResponse::class.java)
-                    accountViewModel.accountBean.value?.auth?.accessToken = response.accessToken
-                    accountViewModel.accountBean.value?.auth?.refreshToken = response.refreshToken
-                    accountViewModel.accountBean.value?.username = username
-                    accountViewModel.accountBean.value?.auth?.isLoggedIn = true
-                    accountViewModel.updateAccountBean()
-
-                    Toast.makeText(requireContext(), "logged in", Toast.LENGTH_SHORT).show()
-                    controller.popBackStack()
-
-                },
-                {
-
-                    Toast.makeText(
-                        requireContext(),
-                        it?.networkResponse?.statusCode.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                }
-            )
         }
 
         binding.buttonRegister.setOnClickListener {
