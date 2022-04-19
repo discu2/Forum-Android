@@ -10,13 +10,9 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.android.volley.Request
 import com.example.discuzandoird.R
-import com.example.discuzandoird.api.ApiService
 import com.example.discuzandoird.databinding.FragmentLoginBinding
 import com.example.discuzandoird.viewmodel.AccountViewModel
-import com.google.gson.Gson
-import org.json.JSONObject
 
 class LoginFragment : Fragment() {
 
@@ -47,6 +43,7 @@ class LoginFragment : Fragment() {
                  username,
                  password,
                  {
+
                      Toast.makeText(requireContext(), "logged in", Toast.LENGTH_SHORT).show()
                      controller.popBackStack()
                  },
