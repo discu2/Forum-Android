@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/fragmentHome"
         android:name="com.example.discuzandoird.fragment.HomeFragment"
-        android:label="home_fragment"
+        android:label="Home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_fragmentHome_to_fragmentAccount"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/fragmentAccount"
         android:name="com.example.discuzandoird.fragment.AccountFragment"
-        android:label="account_fragment"
+        android:label="Account"
         tools:layout="@layout/fragment_account" >
         <action
             android:id="@+id/action_fragmentAccount_to_loginFragment"
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.discuzandoird.fragment.LoginFragment"
-        android:label="fragment_login"
+        android:label="Login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -35,6 +35,6 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.discuzandoird.fragment.RegisterFragment"
-        android:label="fragment_register"
+        android:label="Register"
         tools:layout="@layout/fragment_register" />
 </navigation>

@@ -23,7 +23,6 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         binding.root.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.from_right))
         return binding.root
@@ -34,27 +33,29 @@ class LoginFragment : Fragment() {
         super.onStart()
         val controller: NavController = Navigation.findNavController(this.requireView())
 
-         binding.buttonLoginLogout.setOnClickListener {
+        binding.buttonLoginLogout.setOnClickListener {
 
             val username = binding.editTextTextPersonName.text.toString()
             val password = binding.editTextTextPassword.text.toString()
+            binding.buttonLoginLogout.isEnabled = false
 
-             accountViewModel.login(
-                 username,
-                 password,
-                 {
+            accountViewModel.login(
+                username,
+                password,
+                {
 
-                     Toast.makeText(requireContext(), "logged in", Toast.LENGTH_SHORT).show()
-                     controller.popBackStack()
-                 },
-                 {
-                     Toast.makeText(
-                         requireContext(),
-                         it?.networkResponse?.statusCode.toString(),
-                         Toast.LENGTH_SHORT
-                     ).show()
-                 }
-             )
+                    Toast.makeText(requireContext(), "logged in", Toast.LENGTH_SHORT).show()
+                    controller.popBackStack()
+                },
+                {
+                    Toast.makeText(
+                        requireContext(),
+                        it?.networkResponse?.statusCode.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    binding.buttonLoginLogout.isEnabled = true
+                }
+            )
 
         }
 
